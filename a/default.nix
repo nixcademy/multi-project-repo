@@ -1,19 +1,20 @@
-{ stdenv, lib, cmake, libc, libd
-, static ? stdenv.hostPlatform.isStatic
-}:
+{ stdenv, lib, cmake, libC, libD }:
 
 stdenv.mkDerivation {
-  name = "liba";
+  name = "libA";
 
-  # this is overcomplicated but interesting for learning purposes:
-  # static builds have no visible reference to the original nix store
-  # of any deps.
-  # dynamic builds at least contain a reference to lib C
-  buildInputs = lib.optional (!static) libc;
-  propagatedBuildInputs = [ libd ] ++ lib.optional (static) libc;
+  # A static archive can't encapsulate its dependencies, so both are propagated:
+  # libd is public (exposed in headers), libc is a private implementation dep.
+  propagatedBuildInputs = [ libC libD ];
 
   nativeBuildInputs = [ cmake ];
-  src = ./.;
 
-  cmakeFlags = lib.optional (!static) "-DBUILD_SHARED_LIBS:BOOL=ON";
+  src = lib.fileset.toSource {
+    root = ./.;
+    fileset = lib.fileset.unions [
+      ./CMakeLists.txt
+      ./main.cpp
+      ./include
+    ];
+  };
 }

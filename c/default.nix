@@ -1,11 +1,16 @@
-{ stdenv, lib, cmake
-, static ? stdenv.hostPlatform.isStatic
-}:
+{ stdenv, lib, cmake }:
 
 stdenv.mkDerivation {
-  name = "libc";
-  nativeBuildInputs = [ cmake ];
-  src = ./.;
+  name = "libC";
 
-  cmakeFlags = lib.optional (!static) "-DBUILD_SHARED_LIBS:BOOL=ON";
+  nativeBuildInputs = [ cmake ];
+
+  src = lib.fileset.toSource {
+    root = ./.;
+    fileset = lib.fileset.unions [
+      ./CMakeLists.txt
+      ./main.cpp
+      ./include
+    ];
+  };
 }

@@ -1,22 +1,37 @@
 let
-  sources = import ./nix/sources.nix {};
+  sources = import ./nix/tamal { };
   pkgs = import sources.nixpkgs {
-    overlays = [ (import ./overlay.nix) ];
+    overlays = [
+      (import ./overlay.nix)
+    ];
   };
 in
 {
   inherit (pkgs)
-    liba
-    libb
-    libc
-    libd
+    libA
+    libB
+    libC
+    libD
     myapp;
+
   myapp-static = pkgs.pkgsStatic.myapp;
   myapp-win64 = pkgs.pkgsCross.mingwW64.myapp;
   myapp-aarch64 = pkgs.pkgsCross.aarch64-multiplatform.myapp;
 
   devShell = pkgs.mkShell {
-    inputsFrom = with pkgs; [ liba libb libc libd myapp ];
-    nativeBuildInputs = [ pkgs.graphviz ];
+    inputsFrom = with pkgs; [
+      libA
+      libB
+      libC
+      libD
+      myapp
+    ];
+    nativeBuildInputs = [
+      pkgs.deadnix
+      pkgs.graphviz
+      pkgs.nixfmt-tree
+      pkgs.nixtamal
+      pkgs.statix
+    ];
   };
 }
