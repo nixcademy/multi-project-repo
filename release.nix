@@ -28,12 +28,9 @@ in
       libD
       myapp
     ];
-    nativeBuildInputs = [
-      pkgs.deadnix
+    packages = [
       pkgs.graphviz
-      pkgs.nixfmt-tree
       pkgs.nixtamal
-      pkgs.statix
       (pkgs.treefmt.withConfig {
         settings = {
           on-unmatched = "info";
