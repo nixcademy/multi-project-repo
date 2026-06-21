@@ -3,6 +3,7 @@ let
   pkgs = import sources.nixpkgs {
     overlays = [
       (import ./overlay.nix)
+      (import ./overlay-patch.nix)
     ];
   };
   inherit (pkgs) lib;
