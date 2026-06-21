@@ -1,14 +1,21 @@
 let
   sources = import ./nix/tamal { };
-  pkgs = import sources.nixpkgs {
-    overlays = [
-      (import ./overlay.nix)
-    ];
-  };
+  pkgs = import sources.nixpkgs { };
   inherit (pkgs) lib;
+
+  abcdFrom =
+    pkgs:
+    lib.makeScope pkgs.newScope (self: {
+      libA = self.callPackage ./a { };
+      libB = self.callPackage ./b { };
+      libC = self.callPackage ./c { };
+      libD = self.callPackage ./d { };
+      myapp = self.callPackage ./app { };
+    });
+  abcd = abcdFrom pkgs;
 in
 {
-  inherit (pkgs)
+  inherit (abcd)
     libA
     libB
     libC
@@ -16,12 +23,12 @@ in
     myapp
     ;
 
-  myapp-static = pkgs.pkgsStatic.myapp;
-  myapp-win64 = pkgs.pkgsCross.mingwW64.myapp;
-  myapp-aarch64 = pkgs.pkgsCross.aarch64-multiplatform.myapp;
+  myapp-static = (abcdFrom pkgs.pkgsStatic).myapp;
+  myapp-win64 = (abcdFrom pkgs.pkgsCross.mingwW64).myapp;
+  myapp-aarch64 = (abcdFrom pkgs.pkgsCross.aarch64-multiplatform).myapp;
 
   devShell = pkgs.mkShell {
-    inputsFrom = with pkgs; [
+    inputsFrom = with abcd; [
       libA
       libB
       libC
