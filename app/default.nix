@@ -1,9 +1,18 @@
-{ stdenv, lib, cmake, libA, libB }:
+{
+  stdenv,
+  lib,
+  cmake,
+  libA,
+  libB,
+}:
 
 stdenv.mkDerivation {
   name = "myapp";
 
-  buildInputs = [ libA libB ];
+  buildInputs = [
+    libA
+    libB
+  ];
 
   nativeBuildInputs = [ cmake ];
 

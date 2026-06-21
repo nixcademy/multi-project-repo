@@ -13,7 +13,8 @@ in
     libB
     libC
     libD
-    myapp;
+    myapp
+    ;
 
   myapp-static = pkgs.pkgsStatic.myapp;
   myapp-win64 = pkgs.pkgsCross.mingwW64.myapp;

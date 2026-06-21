@@ -1,4 +1,8 @@
-{ stdenv, lib, cmake }:
+{
+  stdenv,
+  lib,
+  cmake,
+}:
 
 stdenv.mkDerivation {
   name = "libC";
