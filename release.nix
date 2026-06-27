@@ -34,6 +34,7 @@ in
       (pkgs.treefmt.withConfig {
         settings = {
           on-unmatched = "info";
+          excludes = [ "nix/tamal/*" ];
           formatter = {
             nixfmt = {
               command = lib.getExe pkgs.nixfmt;
