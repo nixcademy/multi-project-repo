@@ -49,6 +49,14 @@ in
               command = lib.getExe pkgs.deadnix;
               includes = [ "*.nix" ];
             };
+            cmake-format = {
+              command = lib.getExe pkgs.cmake-format;
+              options = "--in-place";
+              includes = [
+                "*.cmake"
+                "CMakeLists.txt"
+              ];
+            };
           };
         };
       })
