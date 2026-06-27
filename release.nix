@@ -40,7 +40,9 @@ in
               includes = [ "*.nix" ];
             };
             statix = {
-              command = "${lib.getExe pkgs.statix} fix";
+              command = lib.getExe pkgs.statix;
+              options = "fix";
+              no-positional-arg-support = true;
               includes = [ "*.nix" ];
             };
             deadnix = {
